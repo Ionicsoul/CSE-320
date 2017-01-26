@@ -1,0 +1,155 @@
+
+Notes on Computer Project #10
+-----------------------------
+
+Comments about the assignment and responses to frequently asked questions will
+be added to this file as necessary.
+
+***** comments added on 3/28/16 *****
+
+1. As stated on the assignment handout, you are required to create a makefile
+which controls the translation of your program, and the name of your
+executable file must be "proj10".
+
+Since you must link the instructor-supplied driver module with your support
+module, your makefile must include the appropriate steps to assemble your
+version of "proj10.support.s", as well as link the object code modules.
+
+Do not copy the instructor-supplied driver module into your directory, or your
+makefile will fail when your TA attempts to use it under the "handin" system.
+Instead, use the absolute pathname of the driver module in your makefile.
+
+2. Please note the following suggestion:
+
+  You may wish to create stubs for the required functions, then translate,
+  link and execute the program to explore the behavior of the driver module.
+
+You are strongly encouraged to build your solution incrementally, starting
+with stubs (as suggested above).
+
+3. Be sure that you have the correct layout for objects of types "struct
+student" and "struct table" in memory.  For example, you must account for any
+bytes of padding to keep certain fields aligned on the appropriate byte
+boundary in memory.
+
+4. Note that your program must work correctly for any properly formatted data
+set.  An example of a properly formatted data file is available as:
+
+  /user/cse320/Projects/project10.data
+
+Clearly, you will need to develop several data files to test various aspects
+of your solution, since the simple instructor-supplied data file will not be
+sufficient for all of the cases that you will want to test.
+
+5. Please note that the instructor-supplied driver module does not rely on any
+of your functions to perform its work.  Specifically, it does not use your
+"search" and "insert" functions to build the table of students.
+
+6. Please note the function prototype below:
+
+  int search( struct table*, unsigned long, struct student** );
+
+The third argument to function "search" is a pointer to a pointer (an address
+where an address can be stored by the function).
+
+Any function which calls function "search" is responsible for allocating four
+bytes of memory and sending the address of that four-byte area of memory as
+the third argument to "search".
+
+Those four bytes can be allocated in the ".data" section (by a ".word" or
+".skip" instruction) or in the run-time stack (by the "save" instruction which
+is the prologue for that function).
+
+Function "search" will then place a value into that four-byte block of memory
+using "st" (that item just happens to be an address).
+
+7. Please note that the assignment handout states that the table is an ordered
+table, where the identification number is the key.  Recall that an ordered
+table is maintained so that the records in the table are in order, from
+smallest key to largest key.
+
+When you insert a new item, you must keep the table in order.  To do so, you
+need to "open up" a slot in the table at the right place, by moving some
+records down one slot each.
+
+When you delete an item, you also need to keep the table in order.  To do so,
+you need to move some records up one slot each (to write over the top of the
+deleted record).
+
+If you are unable to maintain the table in order, your solution will still be
+worth partial credit.  Under those circumstances, you can take some short
+cuts:  put a new record at the end of the table (for "insert"), and use the
+last record to replace a record being removed (for "delete").  Of course,
+you'll also have to modify your "search" function so that it no longer assumes
+that the table is ordered by key.
+
+To repeat:  for full credit, your solution will maintain the table in order by
+key (identification number).  Solutions which do not maintain the table in
+order will be evaluated for partial credit.
+
+8. The system function "memmove" is useful to copy blocks of data from one
+area of memory to another.  For example:
+
+        .global  main
+
+        .section ".text"
+        .align   4
+  main:
+        save     %sp, -112, %sp
+
+        set      pointA, %o0       ! destination address
+        set      pointB, %o1       ! source address
+        mov      12, %o2           ! number of bytes to copy
+        call     memmove
+        nop
+
+        set      pointA, %o0
+        set      pointB+11, %o1
+        call     memory
+        nop
+
+        ret
+        restore
+
+        .section ".data"
+        .align   4
+  pointA:
+        .byte    'A'               ! Label
+        .align   4
+        .word    12, 16            ! X and Y coordinates
+  pointB:
+        .byte    'B'               ! Label
+        .align   4
+        .word    19, 14            ! X and Y coordinates
+
+  MEMORY CONTENTS [00021234 to 0002124a]
+    00021234: 42 00 00 00 00 00 00 13 00 00 00 0e 42 00 00 00
+    00021244: 00 00 00 13 00 00 00
+
+More information is available via "man memmove".
+
+9. Think carefully about copying a C-style character string from one location
+in memory to another.  The basic strategy is to load a byte from the source
+array and store that byte in the destination array, until you have copied all
+of the characters (including the null byte which marks the end of the source
+string).
+
+10. The program is required to compute the average, which is the number of
+points earned divided by the number of points available.
+
+The points earned and the points available are integer values, so they will
+have to be converted into floating point values before computing the average.
+In C, you would do something like:
+
+  average = float(total) / float(available);
+
+The example program in "project10.divide.s" demonstrates how that can be
+accomplished.  That program can be compiled and executed as follows:
+
+  gcc /user/cse320/Projects/project10.divide.s /user/cse320/lib/reglib.o
+  a.out
+
+Example #29 demonstrates a similar technique.
+
+--M. McCullen
+

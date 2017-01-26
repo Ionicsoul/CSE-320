@@ -1,0 +1,122 @@
+
+
+Lab Exercise #6 -- Integer Operations
+
+1. Examine the C program below, and give the value displayed by the program
+for each output operation.
+
+===============================================================================
+
+#include <stdio.h>
+
+int main()
+{
+  signed int   AAA = 0x7d0000f2, BBB = 0xb500004e;
+
+  unsigned int CCC = 0x7d0000f2, DDD = 0xb500004e;
+
+  printf( "\nUnary Operations\n\n" );
+
+  printf( "%08x\n", -AAA );                /* ______________________________ */
+
+  printf( "%08x\n", ~AAA );                /* ______________________________ */
+
+  printf( "%08x\n", -BBB );                /* ______________________________ */
+
+  printf( "%08x\n", ~BBB );                /* ______________________________ */
+
+  printf( "\nBinary Bitwise Operations (signed)\n\n" );
+
+  printf( "%08x\n", AAA & BBB );           /* ______________________________ */
+
+  printf( "%08x\n", AAA ^ BBB );           /* ______________________________ */
+
+  printf( "%08x\n", AAA | BBB );           /* ______________________________ */
+
+  printf( "%08x\n", AAA << 4 );            /* ______________________________ */
+
+  printf( "%08x\n", BBB << 4 );            /* ______________________________ */
+
+  printf( "%08x\n", AAA >> 12 );           /* ______________________________ */
+
+  printf( "%08x\n", BBB >> 12 );           /* ______________________________ */
+
+  printf( "\nBinary Bitwise Operations (unsigned)\n\n" );
+
+  printf( "%08x\n", CCC & DDD );           /* ______________________________ */
+
+  printf( "%08x\n", CCC ^ DDD );           /* ______________________________ */
+
+  printf( "%08x\n", CCC | DDD );           /* ______________________________ */
+
+  printf( "%08x\n", CCC << 4 );            /* ______________________________ */
+
+  printf( "%08x\n", DDD << 4 );            /* ______________________________ */
+
+  printf( "%08x\n", CCC >> 12 );           /* ______________________________ */
+
+  printf( "%08x\n", DDD >> 12 );           /* ______________________________ */
+
+
+
+  printf( "\nBinary Arithmetic Operations (signed)\n\n" );
+
+  printf( "%08x\n", AAA + BBB );           /* ______________________________ */
+
+  printf( "%08x\n", AAA - BBB );           /* ______________________________ */
+
+  printf( "%08x\n", BBB - AAA );           /* ______________________________ */
+
+  printf( "%08x\n", AAA * 16 );            /* ______________________________ */
+
+  printf( "%08x\n", BBB * 16 );            /* ______________________________ */
+
+  printf( "%08x\n", AAA / 4096 );          /* ______________________________ */
+
+  printf( "%08x\n", BBB / 4096 );          /* ______________________________ */
+
+  printf( "%08x\n", AAA % 4096 );          /* ______________________________ */
+
+  printf( "%08x\n", BBB % 4096 );          /* ______________________________ */
+
+  printf( "\nBinary Arithmetic Operations (unsigned)\n\n" );
+
+  printf( "%08x\n", CCC + DDD );           /* ______________________________ */
+
+  printf( "%08x\n", CCC - DDD );           /* ______________________________ */
+
+  printf( "%08x\n", DDD - CCC );           /* ______________________________ */
+
+  printf( "%08x\n", CCC * 16 );            /* ______________________________ */
+
+  printf( "%08x\n", DDD * 16 );            /* ______________________________ */
+
+  printf( "%08x\n", CCC / 4096 );          /* ______________________________ */
+
+  printf( "%08x\n", DDD / 4096 );          /* ______________________________ */
+
+  printf( "%08x\n", CCC % 4096 );          /* ______________________________ */
+
+  printf( "%08x\n", DDD % 4096 );          /* ______________________________ */
+
+  printf( "\nMasking Operations\n\n" );
+
+  printf( "%08x\n", CCC & 0xffff );        /* ______________________________ */
+
+  printf( "%08x\n", CCC | 0xffff );        /* ______________________________ */
+
+  printf( "%08x\n", DDD & 0xffff );        /* ______________________________ */
+
+  printf( "%08x\n", DDD | 0xffff );        /* ______________________________ */
+}
+
+===============================================================================
+
+2. When you have completed your work, use the executable program in the file
+named "~cse320/Labs/lab06.ops" to check your work.
+
+3. The file "lab06.outline.c" contains a C program which repeatedly prompts
+the user to enter a signed integer value, then displays that number in
+decimal.  Copy that program into your account and revise it as specified in
+the comments.
+

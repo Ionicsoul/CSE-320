@@ -1,0 +1,54 @@
+
+Some additional commentary about Milestone #8.
+
+1. The machine you're building for Milestone #8 is an extension of the machine
+from Milestone #7.
+
+2. I have posted the sequence of machine language instructions which will be
+used by the "handin" system to verify that your machine is working correctly:
+
+  ~cse320/Honors/Milestone08/Testing/
+
+The "handin" processing will use the following command to execute your
+simulated machine:
+
+  arc -u0 0 -u1 0 -u2 0 -u5 0 -X -p15 0 -T 660000
+
+It will then re-execute your simulated machine without the debugging output:
+
+  arc -u0 0 -X -p15 0 -T 660000
+
+The run-time flags are explained in Milestone #6.
+
+3. Since Milestone #8 processes CALL and JMPL instructions, in addition to the
+earlier instructions, you'll need a multiplexer to choose the value to be
+written into the NPC.
+
+That multiplexer is labelled "MUX-C" in the ARC+ diagram (last page of the
+course pack).  The diagram uses the following porting:
+
+  Port 0:  value for Branch instructions when condition is true
+  Port 1:  value for CALL instructions
+  Port 2:  value for sequential execution
+  Port 3:  value for JMPL instructions
+
+You can use whatever porting you wish to connect the data "sources" to the
+multiplexer.
+
+4. The following is a brief overview of the steps taken by the CALL and JMPL
+instructions.
+
+  Execute phase for the CALL instruction:
+
+    PC ==> REG[15]
+    PC + IR(29..0)|00 ==> nPC
+
+  Execute phase for the JMPL instruction:
+
+    PC ==> REG[rd]
+    MUX( REG[rs2], IR(12..0) ) ==> Operand2
+    ALU( REG[rs1], Operand2, add ) ==> nPC
+
+Please note that the CALL instruction always uses register 15 as the location
+to store the current address (PC).
+

@@ -1,0 +1,82 @@
+
+
+CSE 320 Honors Project
+Milestone #1
+
+Milestone Deliverables
+
+  Use the "handin" system to submit the following files:
+
+    addunit.h
+    addunit.c
+
+  I recommend completing the milestone by Tuesday, February 9 (it must be
+  completed no later than Tuesday, February 16).
+
+  Please note that the "handin" system is expecting you to use "320H" as your
+  course and "9" as your section.
+
+Milestone Overview
+
+  The ARC+ microprocessor contains circuits to perform a variety of operations
+  on 32-bit integer data, including arithmetic, bitwise and shift operations.
+
+  This milestone focuses on the circuit which performs addition.
+
+  For our convenience, we'll refer to that circuit as the Add Unit.  In
+  subsequent milestones, we'll develop the Shift Unit and other components of
+  the microprocessor.
+
+Milestone Resources
+
+  The Murdocca and Heuring textbook contains information about several topics
+  which are relevant for this milestone:
+
+    Ripple-Carry addition (pages 469-470)
+    Addition and subtraction (pages 61-67)
+
+Milestone Preparation
+
+  I have provided a framework for you to experiment with an 8-bit version of
+  the Add Unit.  The following files are available on the system under
+  "/user/cse320/Honors/Milestone01":
+
+    add8.h         -- interface for the 8-bit Add Unit
+    add8.c         -- implementation of the 8-bit Add Unit (incomplete)
+    add8.test.c    -- test bed for the 8-bit Add Unit
+    add8.test.make -- makefile for the test bed
+
+  I recommend the following steps:
+
+  a) Create a directory for this milestone and copy the files (above).
+
+  b) Examine "add8.test.make" to familiarize yourself with that makefile.
+
+  c) Use the makefile to create an executable version of the test bed and the
+  8-bit Add Unit (which is currently incomplete), then run the test bed and
+  observe the behavior.
+
+  d) Modify the 8-bit Add Unit to correctly add two values.
+
+
+
+Milestone Specifications
+
+  Copy your completed versions of "add8.h" and "add8.c" to create the two
+  deliverables for this milestone ("addunit.h" and "addunit.c"), then edit
+  those files to implement a 32-bit Add Unit.
+
+  Verify that your 32-bit Add Unit is correct using the following files:
+
+    addunit.check.o
+    addunit.check.make
+
+  Note that "addunit.check" displays the following items:
+
+    Operand #1 (32 bits)
+    Operand #2 (32 bits)
+    Result (32 bits)
+
+  All values are displayed in hexadecimal and are written to the standard
+  error stream.
+

@@ -1,0 +1,115 @@
+
+
+CSE 320 Honors Project
+Milestone #7
+
+Milestone Deliverables
+
+  Use the "handin" system to submit the following file:
+
+    machine.c
+
+  I recommend completing the milestone by Tuesday, April 12 (it must be
+  completed no later than Tuesday, April 19).
+
+  Please note that the "handin" system is expecting you to use "320H" as your
+  course and "9" as your section.
+
+Milestone Overview
+
+  The ARC+ microprocessor recognizes 40 different machine language
+  instructions (a subset of those recognized by the SPARC microprocessor).
+
+  This milestone focuses on the processing of the SETHI instruction and the
+  data movement instructions.
+
+Milestone Resources
+
+  The SPARC Architecture Manual specifies the format of the instructions.  In
+  particular, the diagrams on pages 44-46 are relevant.
+
+Milestone Preparation
+
+  The following files are available under "/user/cse320/Honors/Milestone07":
+
+    clock.h      -- interface to CLOCK
+    clock.o      -- implementation of CLOCK
+    registers.h  -- interface to REG, NPC, PC, IR and NZVC
+    registers.o  -- implementation of REG, NPC, PC, IR and NZVC
+    memory.h     -- interface to IMEM and DMEM
+    memory.o     -- implementation of IMEM and DMEM
+    components.h -- interface to DECODE and ALU
+    components.o -- implementation of DECODE and ALU
+
+    machine.c    -- implementation of the ARC machine (incomplete)
+    machine.make -- makefile for the ARC machine
+
+    test.s       -- assembly language file
+
+  I recommend the following steps:
+
+  a) Create a directory for this milestone and copy the following files:
+
+       /user/cse320/Honors/Milestone07/machine*
+       /user/cse320/Honors/Milestone07/test*
+
+  b) Use "make -f machine.make" to generate the executable named "arc".
+
+  c) Use the following command to generate a sequence of machine language
+  instructions that will serve as input to the simulated machine:
+
+       /user/cse320/bin/arc_prep test
+       cp test testcases
+
+
+
+Milestone Specifications
+
+  The incomplete version of the simulated machine ("machine.c") correctly
+  handles the fetch phase for data manipulation instructions.  You will extend
+  the machine to handle the execute phase for data manipulation instructions,
+  data movement instructions, and SETHI instructions.
+
+  You will create the necessary signals and use the following components to
+  execute data manipulation instructions:
+
+    DECODE -- instructor-supplied Decode Unit
+    REG    -- instructor-supplied Register File
+    ALU    -- instructor-supplied ALU
+    DMEM   -- instructor-supplied Data Memory
+
+  In addition, you may need other components to complete the processing.  For
+  example, you will use a multiplexer to handle the selection of the second
+  operand for the ALU (the contents of a register or the sign-extended
+  "simm13" field).  Also, you will use a multiplexer to handle the selection
+  of the value to be written into the register file ("MUX-B" on the diagram).
+
+  The DMEM component is accessed using a 32-bit address and is viewed as being
+  subdivided into segments of 8192 bytes.  The first segment (2048 four-byte
+  words of memory) represents the data memory.  Data movement instructions
+  with effective addresses in the set {0x00000000, 0x00000004, 0x00000008,
+  ...., 0x00001FF8, 0x00001FFC} are interpreted as loads from or stores to the
+  data memory.
+
+  The ARC microprocessor uses memory-mapped I/O, where specific addresses in
+  the machine's address space correspond to I/O devices and accesses to those
+  addresses are interpreted as commands to the I/O devices.
+
+  ST instructions with an effective address of 0x00002000 access the output
+  device which displays an ASCII character in the terminal window; ST
+  instructions with an effective address of 0x00002001 access the output
+  device which displays a 4-byte signed integer in the terminal window.
+
+  The DMEM component detects data movement instructions with invalid effective
+  addresses, displays an error message in the terminal window, and aborts
+  execution.
+
+  LD and ST instructions which access an invalid word address in the first
+  segment produce the message "Error1".
+
+  ST instructions which access an invalid output device in the second segment
+  (addresses starting with 0x00002000) produce the message "Error2".
+
+  LD and ST instructions which access an invalid segment produce the message
+  "Error3".
+

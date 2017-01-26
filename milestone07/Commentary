@@ -1,0 +1,55 @@
+
+Some additional commentary about Milestone #7.
+
+1. The machine you're building for Milestone #7 is an extension of the machine
+from Milestone #6.
+
+2. I have posted the sequence of machine language instructions which will be
+used by the "handin" system to verify that your machine is working correctly:
+
+  ~cse320/Honors/Milestone07/Testing/
+
+The "handin" processing will use the following command to execute your
+simulated machine:
+
+  arc -u0 0 -u1 0 -u2 0 -u5 0 -X -p15 0 -T 670000
+
+It will then re-execute your simulated machine without the debugging output:
+
+  arc -u0 0 -X -p15 0 -T 670000
+
+Note the use of Option 5 (instead of Option 4) in the first command.  The
+run-time flags are explained in Milestone #6.
+
+3. Since Milestone #7 processes SETHI instructions and data movement
+instructions, in addition to data manipulation instructions, you'll need a
+multiplexer to choose the value to be written into the register file.
+
+That multiplexer is labelled "MUX-B" in the ARC+ diagram (last page of the
+course pack).  The diagram uses the following porting:
+
+  Port 0:  value for LD (output of Data Memory)
+  Port 1:  valude for Data Manipulation (output of ALU)
+  Port 2:  value for SETHI (IR[21:0] and 10 zeroes)
+  Port 3:  value for CALL/JMPL (PC)
+
+You can use whatever porting you wish to connect the data "sources" to the
+multiplexer.  Note that CALL and JMPL instructions are not part of this
+milestone, so one of the four ports on the multiplexer is irrelevant.
+
+4. Not all of the instructions update the Register File:  ST instructions and
+Branch instructions do not write a value into a general-purpose register.
+
+In fact, the only time the Register File should be updated is when the machine
+is running, when the instruction is valid, and when the instruction is one
+that writes a value into a general-purpose register.
+
+5. The automatic processing of Milestone #7 accounts for the fact that some
+signal values are irrelevant in certain situations.
+
+In particular, the output of MUX-B is irrelevant when that value is not going
+to be written into the Register File.  However, that value is displayed by
+user run-time flag 4 (the last item).  Thus, the automatic processing uses
+run-time flag 5, which produces the same output as flag 4, except for that
+last item.
+

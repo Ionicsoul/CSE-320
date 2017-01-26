@@ -1,0 +1,149 @@
+
+Some additional commentary about Milestone #6.
+
+1. I have posted the source code for the CLOCK component:
+
+  ~cse320/Honors/Milestone06/clock.c
+
+It might be instructive to review that source code to see how I used "user
+run-time flag 0" to create three different clock modes:
+
+  manual clock mode -- controlled by the "c" and "r" keys
+
+  automatic clock mode -- uses a "Clock" component to issue clock pulses
+
+  debugging clock mode -- runs in automatic mode for N clock pulses, then goes
+    into manual mode
+
+Also, it might be instructive to see how I used "user run-time flag 1" to
+display the count of clock pulses (in hexadecimal).
+
+2. In order to initialize the machine, one clock pulse must occur before the
+machine is in the "Running" state.
+
+When executing the machine in "manual clock mode", that's why you need to
+touch the "c" key once before touching the "r" key (the "c" key is tied to a
+Pulser and issues one clock pulse each time, and the "r" key is tied to a
+Switch and puts the machine in the "Running" state).
+
+As stated in the specifications:
+
+  By default, the simulated machine executes in "manual clock mode", so
+  you must issue the following sequence of keystrokes:
+
+       c r c c c c ....
+
+When executing the machine in "automatic clock mode" or "debugging clock
+mode", the CLOCK component issues one clock pulse before putting the machine
+in the "Running" state.
+
+3. I have posted the sequence of machine language instructions which will be
+used by the "handin" system to verify that your machine is working correctly:
+
+  ~cse320/Honors/Milestone06/Testing/
+
+The "handin" processing will use the following command to execute your
+simulated machine:
+
+  arc -u0 0 -u1 0 -u2 0 -u4 0 -X -p15 0 -T 500000
+
+The additional user run-time flags will be explained below.  The "-X" option
+turns off the X-11 display, and the "-p15 0 -T 500000" combination of options
+runs the simulation in "automatic clock mode" for 50 clock pulses.
+
+4. Options can be supplied to the simulation using "user run-time flags".  The
+"sim" package includes the declaration of the following global variable:
+
+  int userRunTimeFlag[16]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+
+That is, 16 different options can be recognized by the simulated machine; the
+source code for the CLOCK component shows how the user run-time flags can be
+utilized.  Note that the default value of each of the 16 options is -1.
+
+The following is an overview of the current user run-time flags.
+
+  option  description
+  ------  -----------
+  -u0 0   CLOCK -- automatic mode
+  -u1 0   CLOCK -- display clock pulse counter
+  -u2 0   NPC, PC, IR, NZVC -- display current value of each register
+  -u3 0   DECODE -- display input and output signals
+  -u4 0   REG -- display input and output signals
+  -u5 0   REG -- display input and output signals (except value to be written)
+  -u6 0   ALU -- display input and output signals
+
+Options 7, 8 and 9 are reserved.  Options 10-15 may be defined and used for
+your own debugging purposes, if desired.
+
+A partial execution example is shown below:
+
+  <prompt> arc -u1 0 -u2 0 -u3 0 -u4 0 -u6 0
+    .
+    .
+
+  CL 00c
+    NPC 00000030  PC 0000002c  IR 98118007  NZVC 0
+    DEC 98118007 1 0 0 1 0 0 0 0 0 02
+    REG 06 00000666 07 00000777 0c ???????? 1 00000777
+    ALU 02 00000666 00000777 00000777 0
+
+The partial output shows the values displayed at clock pulse 12, including the
+contents of the control registers (NPC, PC, IR, NZVC), as well as the inputs
+to and outputs from DECODE, REG and ALU.
+
+Option 3 displays the following information (in hexadecimal):
+
+  32 bits -- machine language instruction
+   1 bit  -- Instruction is valid?
+   1 bit  -- LD instruction?
+   1 bit  -- ST instruction?
+   1 bit  -- Data manipulation instruction?
+   1 bit  -- SETHI instruction?
+   1 bit  -- Branch instruction?
+   1 bit  -- CALL instruction?
+   1 bit  -- JMPL instruction?
+   1 bit  -- Instruction updates NZVC?
+   6 bits -- Opcode for ALU
+
+Option 4 displays the following information (in hexadecimal):
+
+   5 bits -- register number A (register to be read)
+  32 bits -- contents of Reg[A]
+   5 bits -- register number B (register to be read)
+  32 bits -- contents of Reg[B]
+   5 bits -- register number C (register to be read and written)
+  32 bits -- contents of Reg[C]
+   1 bit  -- control signal (update the register file when asserted)
+  32 bits -- value to be written into Reg[C]
+
+Option 5 displays the following information (in hexadecimal):
+
+   5 bits -- register number A (register to be read)
+  32 bits -- contents of Reg[A]
+   5 bits -- register number B (register to be read)
+  32 bits -- contents of Reg[B]
+   5 bits -- register number C (register to be read and written)
+  32 bits -- contents of Reg[C]
+   1 bit  -- control signal (update the register file when asserted)
+
+Option 6 displays the following information (in hexadecimal):
+
+   6 bits -- operation code
+  32 bits -- operand #1
+  32 bits -- operand #2
+  32 bits -- result
+   4 bits -- condition codes
+
+5. Please note that not all ARC+ machine language instructions update the
+register file.  If the machine is running, the following machine language
+instructions write a value into a general-purpose register:
+
+  Data manipulation -- output of ALU
+  LD instruction    -- output of Data Memory
+  SETHI instuction  -- disp22 concatenated with 10 bits of zero
+  CALL instruction  -- current value of PC (into register 15)
+  JMPL instruction  -- current value of PC (into register rd)
+
+If the machine is not running or the current machine language instruction is
+not one of those listed above, then the register file should not be updated.
+
